@@ -32,7 +32,7 @@ with open('spec.json', 'w') as f:
 ```
 It will generate the `spec.json` file with the template
 
-```json
+```
 {
     "width": 96, // patch_width
     "height": 96, // patch_height
