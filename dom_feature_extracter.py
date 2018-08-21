@@ -32,7 +32,8 @@ class DOMFeatureExtracter:
         elem = self.get_element_by_point(x, y)
         box = self.get_bounding_box(elem)
         while box["width"] < 15 or box["height"] < 15:
-            box = box.parent
+            elem = elem.parent
+            box = self.get_bounding_box(elem)
         return box["width"] / box["height"], box["height"] / box["width"]
     
     def is_img(self, x, y):
@@ -54,7 +55,6 @@ class DOMFeatureExtracter:
     
     def has_harmful_url_segment(self, x, y):
         elem = self.get_element_by_point(x, y)
-        print(list(elem.children))
         while elem.parent is not None:
             if elem.name == 'a' and "href" in elem:
                 if self.easylist.is_harmful_url(elem["href"]):

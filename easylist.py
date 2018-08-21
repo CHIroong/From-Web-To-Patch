@@ -1,3 +1,12 @@
+from adblockparser import AdblockRules
+
+class EasyListHandler:
+    def __init__(self):
+        with open('easylist.txt', 'r', encoding='UTF-8') as f:
+            self.rules = AdblockRules(list(f))
+    def is_harmful_url(self, url):
+        return self.rules.should_block(input())
+
 class EasyListCustomHandler:
     def __init__(self):
         self.harmful_css_ids = set() # 8179
@@ -13,7 +22,6 @@ class EasyListCustomHandler:
                     if line.startswith(prefix):
                         self.harmful_url_segments.add(line)
                         break
-
     def is_harmful_css_id(self, css_id):
         return css_id in self.harmful_css_ids
     def is_harmful_css_classes(self, css_classes):
@@ -27,12 +35,3 @@ class EasyListCustomHandler:
             if harmful_url_segment in url:
                 return True
         return False
-
-from adblockparser import AdblockRules
-
-class EasyListHandler:
-    def __init__(self):
-        with open('easylist.txt', 'r', encoding='UTF-8') as f:
-            self.rules = AdblockRules(list(f))
-    def is_harmful_url(self, url):
-        return self.rules.should_block(input())
