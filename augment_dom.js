@@ -66,16 +66,19 @@
 
 
 (function(){
-    function randomId(){
-        let ret = "SG_"
-        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        for(let i=0;i<25;i++) ret += possible.charAt(Math.floor(Math.random() * possible.length));
-        return ret
+    let cnt = 0
+    function newId(){
+        return "" + (cnt++)
     }
 
     function assignSGInfo(elem){
-        elem.setAttribute("sg:id", randomId())
+        elem.setAttribute("sg:id", newId())
         elem.setAttribute("sg:rect", JSON.stringify(elem.getBoundingClientRect()))
+        let computed_style = getComputedStyle(elem)
+        elem.setAttribute("sg:style", JSON.stringify({
+            "cursor": computed_style["cursor"],
+            "font-size": conputed_style["font-size"],
+        }))
         for(let child of elem.children) assignSGInfo(child)
     }
     
@@ -94,9 +97,9 @@
                 let elem = document.elementFromAbsolutePoint(x, y)
                 if(elem){
                     let sg_id = elem.getAttribute("sg:id")
-                    ret[y/16].push([sg_id, getComputedStyle(elem).cursor, x, y])
+                    ret[y/16].push(sg_id)
                 }
-                else ret[y/16].push([null, "auto", x, y])
+                else ret[y/16].push(null)
             }
         }
         return ret
