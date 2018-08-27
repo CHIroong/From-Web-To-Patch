@@ -77,7 +77,7 @@
         let computed_style = getComputedStyle(elem)
         elem.setAttribute("sg:style", JSON.stringify({
             "cursor": computed_style["cursor"],
-            "font-size": conputed_style["font-size"],
+            "font-size": computed_style["font-size"],
         }))
         for(let child of elem.children) assignSGInfo(child)
     }
