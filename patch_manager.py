@@ -25,8 +25,9 @@ class PatchManager:
     
     def tagged_data_of_id(self, data_id):
         for screenshot_id, rects in self.tagged:
-            if screenshot_id == data_id:
+            if str(screenshot_id) == str(data_id):
                 return rects
+        return []
 
 
     def save_patches_at(self, patch_directory):
