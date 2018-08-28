@@ -51,7 +51,8 @@ class PatchManager:
                 "id": data["id"],
                 "filename": data["filename_img"].split('/')[-1],
                 "width": 0, "height": 0,
-                "patches": []
+                "keywords": data["dom"].salient_keywords()
+                "patches": [],
             }
 
             folder = self.patch_directory + "%s/" % data["id"]

@@ -10,7 +10,6 @@ with open("test_tagged.txt", "w") as f:
 pm = PatchManager()
 for i in range(2):
     pm.feed(i, 'data/%d.png' % i, 'data/%d.txt' % i)
-    print(i, pm.data[i]["dom"].salient_keywords())
 pm.feed_tagged_data('test_tagged.txt')
 pm.save_patches_at('test_patches/')
 with open('test_spec.json', 'w') as f:
