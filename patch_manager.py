@@ -60,7 +60,8 @@ class PatchManager:
             cell["width"], cell["height"] = img.size
 
             if verbose:
-                prev = 0.0
+                print("making patches of %s " % cell["filename"])
+                prev = 20
 
             for i in range(0, cell["width"]-patch_size, patch_size):
                 for j in range(0, cell["height"]-patch_size, patch_size):
@@ -92,10 +93,9 @@ class PatchManager:
                         "tags" : tags,
                         "features": features,
                     })
-                if verbose and i / cell["width"] > prev:
-                    print(prev * 100, "%")
-                    prev = i / cell["width"] + 0.1
-
+                    if verbose and (i*cell["height"]+j)/cell["height"]/cell["width"] > prev/100:
+                        print("... %d%% done" % prev)
+                        prev += 20
             result_spec["data"].append(cell)
 
         return json.dumps(result_spec, indent=4)
