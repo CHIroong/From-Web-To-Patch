@@ -17,27 +17,14 @@ It deals with every procedure required to convert a website into a CNN-feedable 
 
 *Note* Inner contents iframes are not captured. Only the topmost iframe will present in the result.
 
-## Local Data to Tagging Interface
+## Tag data
 
 * Deploy [tag-me](https://github.com/CHIroong/tag-me) with `raw_data/[id].png`s
 * Tag the screenshots
-* run `python fetch_tagged_data.py [tag-me-export-url] [filename]` to save the tagged result as [filename]
-    * `python fetch_tagged_data.py http://1.2.3.4:5/screenshots/1/export raw_data/tagged.json`
 
-## Local Data to Patch
+## Integrate all information to patches
 
-See the example below.
-
-```python
-from patch_manager import PatchManager
-pm = PatchManager()
-pm.feed('raw_data/0.png', 'raw_data/0.html')
-pm.feed('raw_data/1.png', 'raw_data/1.html')
-pm.feed_tagged_data('raw_data/tagged.json')
-pm.save_patches_at('patches/') # root directory where the patches are
-with open('spec.json', 'w') as f:
-    f.write(pm.generate_spec())
-```
+Refer to `example.py` for the usage.
 It will generate the `spec.json` file with the template
 
 ```
@@ -53,6 +40,7 @@ It will generate the `spec.json` file with the template
             "id": 0, // data id
             "filename": "0.png", // the whole image will be at "images/0/0.png"
             "width": 1120, "height": 1700, // width and height of the whole image
+            "keywords": [...] // visually salient keyword
             "patches": [
                 {
                     "filename": "0x0.png", // this patch will be at "images/0/0x0.png"
