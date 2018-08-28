@@ -22,6 +22,12 @@ class PatchManager:
     def feed_tagged_data(self, tagged_data_filename):
         with open(tagged_data_filename, 'r') as f:
             self.tagged = json.loads(f.read())
+    
+    def tagged_data_of_id(self, data_id):
+        for screenshot_id, rects in self.tagged:
+            if screenshot_id == data_id:
+                return rects
+
 
     def save_patches_at(self, patch_directory):
         if patch_directory[-1] != '/':
@@ -63,6 +69,8 @@ class PatchManager:
             if verbose:
                 print("making patches of %s " % cell["filename"])
                 prev = 20
+            
+            rects = self.tagged_data_of_id(data["id"])
 
             for i in range(0, cell["width"]-patch_size, patch_size):
                 for j in range(0, cell["height"]-patch_size, patch_size):
@@ -72,7 +80,7 @@ class PatchManager:
                     cropped.save(folder + cropped_filename)
 
                     tags = [0] * len(result_spec["tags"])
-                    self.calc_tags(tags, (left, top, right, bottom))
+                    self.calc_tags(rects, tags, (left, top, right, bottom))
 
                     dom = data["dom"]
                     x, y = i + patch_size // 2, j + patch_size // 2
@@ -101,18 +109,17 @@ class PatchManager:
 
         return json.dumps(result_spec, indent=4)
 
-    def calc_tags(self, tags, patch):
+    def calc_tags(self, rects, tags, patch):
         l, u, r, d = patch
         patch_area = (r - l) * (d - u)
-        for screenshot_id, rects in self.tagged:
-            for rect in rects:
-                try:
-                    ll = rect["left"]
-                    uu = rect["top"]
-                    rr = rect["left"] + rect["width"]
-                    dd = rect["top"] + rect["height"]
-                except TypeError as e: # sometimes None values are in the rect
-                    continue
-                area = max(0, min(r, rr) - max(l, ll)) * max(0, min(d, dd) - max(u, uu))
-                tags[rect["type_id"] - 1] += area / patch_area
-            tags[-1] = 1 - sum(tags)
+        for rect in rects:
+            try:
+                ll = rect["left"]
+                uu = rect["top"]
+                rr = rect["left"] + rect["width"]
+                dd = rect["top"] + rect["height"]
+            except TypeError as e: # sometimes None values are in the rect
+                continue
+            area = max(0, min(r, rr) - max(l, ll)) * max(0, min(d, dd) - max(u, uu))
+            tags[rect["type_id"] - 1] += area / patch_area
+        tags[-1] = 1 - sum(tags)
