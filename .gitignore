@@ -1,1 +1,4 @@
 patches/*
+data*
+test*
+*.pyc

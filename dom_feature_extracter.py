@@ -27,7 +27,7 @@ class DOMFeatureExtracter:
     
     def cursor_style(self, x, y):
         elem = self.get_element_by_point(x, y)
-        return elem["sg:style"]["cursor"]
+        return json.loads(elem["sg:style"])["cursor"]
 
     def get_bounding_box(self, elem):
         return json.loads(elem["sg:rect"])
@@ -38,7 +38,7 @@ class DOMFeatureExtracter:
         while box["width"] < 15 or box["height"] < 15:
             elem = elem.parent
             box = self.get_bounding_box(elem)
-        return box["width"] / box["height"], box["height"] / box["width"]
+        return box["width"] / box["height"]
     
     def is_img(self, x, y):
         elem = self.get_element_by_point(x, y)

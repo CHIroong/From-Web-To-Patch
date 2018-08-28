@@ -10,7 +10,6 @@ class PatchManager:
         self.data = []
         self.patch_directory = None
         self.tagged = None
-        pass
 
     def feed(self, data_id, filename_image, filename_html):
         self.data.append({
@@ -71,7 +70,7 @@ class PatchManager:
                     cropped.save(folder + cropped_filename)
 
                     tags = [0] * len(result_spec["tags"])
-                    #calc_tags(tags, rects, (left, top, right, bottom))
+                    self.calc_tags(tags, (left, top, right, bottom))
 
                     dom = data["dom"]
                     x, y = i + patch_size // 2, j + patch_size // 2
@@ -101,17 +100,18 @@ class PatchManager:
 
         return json.dumps(result_spec, indent=4)
 
-    @staticmethod
-    def calc_tags(tags, rects, patch):
+    def calc_tags(self, tags, patch):
         l, u, r, d = patch
-        for rect in rects:
-            try:
-                ll = rect["left"]
-                uu = rect["top"]
-                rr = rect["left"] + rect["width"]
-                dd = rect["top"] + rect["height"]
-            except TypeError as e: # sometimes None values are in the rect
-                continue
-            area = max(0, min(r, rr) - max(l, ll)) * max(0, min(d, dd) - max(u, uu))
-            tags[rect["type_id"] - 1] += area / patch_size**2
-        tags[-1] = 1 - sum(tags)
+        patch_area = (r - l) * (d - u)
+        for screenshot_id, rects in self.tagged:
+            for rect in rects:
+                try:
+                    ll = rect["left"]
+                    uu = rect["top"]
+                    rr = rect["left"] + rect["width"]
+                    dd = rect["top"] + rect["height"]
+                except TypeError as e: # sometimes None values are in the rect
+                    continue
+                area = max(0, min(r, rr) - max(l, ll)) * max(0, min(d, dd) - max(u, uu))
+                tags[rect["type_id"] - 1] += area / patch_area
+            tags[-1] = 1 - sum(tags)
