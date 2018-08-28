@@ -1,11 +1,13 @@
 from adblockparser import AdblockRules
 
 class EasyListHandler:
-    def __init__(self):
-        with open('easylist.txt', 'r', encoding='UTF-8') as f:
-            self.rules = AdblockRules(list(f))
+    with open('easylist.txt', 'r', encoding='UTF-8') as f:
+        rules = AdblockRules(list(f))
+    #def __init__(self):
+        #with open('easylist.txt', 'r', encoding='UTF-8') as f:
+            #self.rules = AdblockRules(list(f))
     def is_harmful_url(self, url):
-        return self.rules.should_block(input())
+        return EasyListHandler.rules.should_block(input())
 
 class EasyListCustomHandler:
     def __init__(self):
