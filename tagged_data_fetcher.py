@@ -5,11 +5,12 @@ import requests
 from collections import defaultdict
 
 class TaggedDataFetcher:
-    def __init__(self, url):
+    def __init__(self, url, to_exclude=[]):
         data = json.loads(requests.get(url).text)
         self.rects_info = defaultdict(list)
         for rect in data["target"]:
-            self.rects_info[rect["screenshot_id"]].append(rect)
+            if rect["screenshot_id"] not in to_exclude:
+                self.rects_info[rect["screenshot_id"]].append(rect)
     
     def has_tagged_info(self, screenshot_id):
         return screenshot_id in self.rects_info
