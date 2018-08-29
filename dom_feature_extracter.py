@@ -14,6 +14,11 @@ class DOMFeatureExtracter:
         self.point_data = json.loads(self.soup.body["sg:point-data"])
         self.easylist = EasyListHandler()
 
+    def size(self):
+        box = json.loads(self.soup.body["sg:rect"])
+        return len(self.point_data[0]) * 16, len(self.point_data) * 16
+        #return box["width"], box["height"]
+
     def get_point_data(self, x, y):
         x -= x % 16
         y -= y % 16

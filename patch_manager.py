@@ -65,8 +65,17 @@ class PatchManager:
             folder = self.patch_directory + "%s/" % data["id"]
             shutil.copyfile(data["filename_img"], folder + cell["filename"])
             img = Image.open(folder + cell["filename"])
+            dom_width, dom_height = data["dom"].size()
             cell["width"], cell["height"] = img.size
-
+            if dom_height < cell["height"]:
+                cell["height"] = dom_height
+            #
+            #dom_width, dom_height = data["dom"].size()
+            #if abs(dom_width-cell["width"]) > 16 or abs(dom_height-cell["height"]) > 16:
+            #if dom_width != cell["width"] or dom_height < cell["height"]:
+            #    print(data["id"], dom_width, cell["width"], dom_height, cell["height"])
+            #continue
+            
             if verbose:
                 print("making patches of %s " % cell["filename"])
                 prev = 20
