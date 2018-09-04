@@ -2,3 +2,11 @@ patches/*
 data*
 test*
 *.pyc
+
+raw_data
+sample
+sample_patches
+sample_spec.json
+patches_40_(1).zip
+patches_40_(2).zip
+spec.json

@@ -80,7 +80,8 @@ class PatchManager:
                 print("making patches of %s " % cell["filename"])
                 prev = 20
             
-            rects = self.tagged_data_of_id(data["id"])
+            if self.tagged is not None:
+                rects = self.tagged_data_of_id(data["id"])
 
             for i in range(0, cell["width"]-patch_size, patch_size):
                 for j in range(0, cell["height"]-patch_size, patch_size):
@@ -90,7 +91,8 @@ class PatchManager:
                     cropped.save(folder + cropped_filename)
 
                     tags = [0] * len(result_spec["tags"])
-                    self.calc_tags(rects, tags, (left, top, right, bottom))
+                    if self.tagged is not None:
+                        self.calc_tags(rects, tags, (left, top, right, bottom))
 
                     dom = data["dom"]
                     x, y = i + patch_size // 2, j + patch_size // 2
